@@ -41,6 +41,70 @@ El sistema se basa en una arquitectura de **microservicios cognitivos** utilizan
 
 ---
 
+
+
+## 📄 Archivos de Configuración y Entrada
+
+Para que el sistema funcione, necesita dos archivos JSON principales que actúan como entrada de datos y configuración.
+
+### `stories_batch.json`
+
+Este archivo contiene el lote de historias de usuario que el **Agente Planificador** procesará. Es una lista de objetos, donde cada objeto representa una tarea a estimar.
+
+**Estructura:**
+* `id` (string): Identificador único de la historia (ej. "STORY-001").
+* `title` (string): Título descriptivo y conciso de la tarea.
+* `gherkin` (string): La descripción de la historia en formato Gherkin (`Given`/`When`/`Then`).
+* `unit_tests` (string): El código o la descripción de las pruebas unitarias asociadas. Proporciona un contexto técnico crucial sobre los criterios de aceptación.
+
+**Ejemplo:**
+```json
+[
+    {
+        "id": "STORY-001",
+        "title": "Exportar reporte de ventas a PDF",
+        "gherkin": "Feature: Exportar reporte de ventas...",
+        "unit_tests": "def test_pdf_generation():\\n  # Verifica que el archivo se crea..."
+    },
+    {
+        "id": "STORY-002",
+        "title": "Carga de avatar de perfil a S3",
+        "gherkin": "Feature: Carga de avatar de perfil...",
+        "unit_tests": "def test_upload_valid_image(client, mock_s3):\\n  # Simula subida exitosa..."
+    }
+]
+````
+
+### `tech_stack.json`
+
+Este archivo proporciona al **Agente Investigador** el contexto sobre el stack tecnológico del proyecto. Esto le permite generar consultas de búsqueda mucho más relevantes y específicas.
+
+**Estructura:**
+
+  * `projectName` (string): Nombre del proyecto (informativo).
+  * `technologies` (array of strings): Una lista de las tecnologías, frameworks y librerías principales del proyecto.
+
+**Ejemplo:**
+
+```json
+{
+  "projectName": "Modern E-Commerce Platform",
+  "technologies": [
+    "vue.js",
+    "nuxt.js",
+    "node.js",
+    "express",
+    "mongodb",
+    "graphql",
+    "typescript",
+    "jest",
+    "nginx",
+    "aws ec2"
+  ]
+}
+```
+
+
 ## 🚀 Puesta en Marcha
 
 Sigue estos pasos para configurar y ejecutar el proyecto en tu entorno local.
@@ -91,8 +155,13 @@ Sigue estos pasos para configurar y ejecutar el proyecto en tu entorno local.
     # Desde la carpeta raíz del proyecto
     python digital-twin/setup_models.py 
     ```
-    
-### 3. Ejecución del Sistema
+
+### 3. Ingresa tus historias y el stack del proyecto
+
+Tus historias van en la carpeta `input`.
+
+
+### 4. Ejecución del Sistema
 
 Una vez completada la configuración, lanza el sistema multiagente desde la carpeta `digital-twin`.
 
