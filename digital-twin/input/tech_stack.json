@@ -1,0 +1,15 @@
+{
+  "projectName": "Modern E-Commerce Platform",
+  "technologies": [
+    "vue.js",
+    "nuxt.js",
+    "node.js",
+    "express",
+    "mongodb",
+    "graphql",
+    "typescript",
+    "jest",
+    "nginx",
+    "aws ec2"
+  ]
+}

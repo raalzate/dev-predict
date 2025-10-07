@@ -1,0 +1,9 @@
+spade
+scikit-learn
+joblib
+pandas
+google-generativeai
+python-dotenv
+googlesearch-python
+requests
+beautifulsoup4

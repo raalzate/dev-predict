@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visor Interactivo del Gemelo Digital de Estimación</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Cool Gray and Amber -->
+    <!-- Application Structure Plan: The SPA is structured as a single-page dashboard with vertical thematic sections. A sticky navigation bar allows users to jump between sections. The core of the application is the transformation of static process flows (architecture, ML training) into interactive diagrams. Users can click on each step to get detailed information, making the complex technical content more digestible and engaging. This structure was chosen to guide the user through a logical discovery path, from a high-level overview to implementation details, without overwhelming them with a wall of text. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Architecture Flow -> Goal: Organize/Explain -> Viz: Interactive HTML/CSS Diagram -> Interaction: Click on a step to reveal a modal with detailed text. Justification: A static diagram is passive; an interactive one encourages exploration and improves comprehension of the multi-step process. Method: Vanilla JS and Tailwind CSS.
+        - Report Info: Agent Roles -> Goal: Compare/Inform -> Viz: Tabbed Interface -> Interaction: Click on an agent's tab to view its specific role and logic. Justification: Tabs are a standard, space-efficient UI pattern for organizing related but distinct pieces of information, preventing clutter. Method: Vanilla JS.
+        - Report Info: ML Training Process -> Goal: Organize/Explain -> Viz: Interactive HTML/CSS Diagram -> Interaction: Clickable steps similar to the main architecture flow. Justification: Deconstructs another complex process into manageable, explorable parts. Method: Vanilla JS.
+        - Report Info: Tech Stack table -> Goal: Inform -> Viz: Grid of styled cards with icons. Justification: More visually appealing and modern than a standard HTML table.
+        - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .section-title { border-bottom: 2px solid #F59E0B; padding-bottom: 0.5rem; }
+        .step-connector {
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            transform: translateY(-50%);
+            width: 4rem; 
+            height: 2px;
+            background-color: #6B7280;
+        }
+        .step-connector-arrow {
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            transform: translate(3.5rem, -50%) rotate(45deg);
+            width: 10px;
+            height: 10px;
+            border-top: 2px solid #6B7280;
+            border-right: 2px solid #6B7280;
+        }
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        .nav-link.active { color: #F59E0B; border-bottom-color: #F59E0B; }
+        .folder { font-weight: 600; color: #1E40AF; }
+        .file { color: #4B5563; }
+        .tree-container ul { padding-left: 1.5rem; border-left: 1px solid #D1D5DB; }
+        .tree-container li { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Header y Navegación -->
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div>
+                <h1 class="text-xl md:text-2xl font-bold text-gray-900">Gemelo Digital de Estimación</h1>
+                <p class="text-sm text-gray-600">Una exploración interactiva del sistema</p>
+            </div>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#overview" class="nav-link text-gray-600 hover:text-amber-500 font-medium border-b-2 border-transparent transition">Visión General</a>
+                <a href="#architecture" class="nav-link text-gray-600 hover:text-amber-500 font-medium border-b-2 border-transparent transition">Arquitectura</a>
+                <a href="#agents" class="nav-link text-gray-600 hover:text-amber-500 font-medium border-b-2 border-transparent transition">Los Agentes</a>
+                <a href="#model" class="nav-link text-gray-600 hover:text-amber-500 font-medium border-b-2 border-transparent transition">Modelo IA</a>
+                <a href="#setup" class="nav-link text-gray-600 hover:text-amber-500 font-medium border-b-2 border-transparent transition">Puesta en Marcha</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+        <!-- Sección 1: Visión General -->
+        <section id="overview" class="mb-20 scroll-mt-24">
+            <h2 class="section-title text-3xl font-bold mb-6">Visión General del Sistema</h2>
+            <p class="text-lg text-gray-700 mb-8 max-w-4xl">
+                Este proyecto simula y automatiza el proceso cognitivo de un equipo de desarrollo al estimar la complejidad y el esfuerzo de las historias de usuario. Utiliza un sistema multiagente donde especialistas autónomos de IA colaboran para producir una estimación refinada, combinando datos históricos, investigación en tiempo real y razonamiento avanzado.
+            </p>
+            <h3 class="text-2xl font-semibold mb-6">Stack Tecnológico Principal</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                    <div class="text-2xl mb-2">🤖</div><h4 class="font-bold text-lg">SPADE (Python)</h4><p class="text-gray-600">Orquestación de la comunicación asíncrona entre agentes.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                    <div class="text-2xl mb-2">📊</div><h4 class="font-bold text-lg">Scikit-learn & Pandas</h4><p class="text-gray-600">Entrenamiento del modelo de regresión para la estimación inicial.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                     <div class="text-2xl mb-2">💡</div><h4 class="font-bold text-lg">Google Gemini API</h4><p class="text-gray-600">Análisis, síntesis y refinamiento de la estimación final.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                     <div class="text-2xl mb-2">🌐</div><h4 class="font-bold text-lg">googlesearch-python</h4><p class="text-gray-600">Búsqueda y extracción de información técnica de internet.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                     <div class="text-2xl mb-2">💬</div><h4 class="font-bold text-lg">Prosody & Docker</h4><p class="text-gray-600">Servidor XMPP para la comunicación de los agentes.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección 2: Arquitectura -->
+        <section id="architecture" class="mb-20 scroll-mt-24">
+            <h2 class="section-title text-3xl font-bold mb-2">Arquitectura del Sistema</h2>
+            <p class="text-lg text-gray-700 mt-4 mb-8 max-w-4xl">La arquitectura se basa en el concepto de **microservicios cognitivos**. Cada agente es un servicio independiente, desacoplado y con una única responsabilidad. No se comunican directamente entre sí, sino a través de un bus de mensajes centralizado: el servidor XMPP (Prosody). Esto crea un sistema robusto y escalable donde los agentes pueden operar de forma autónoma.</p>
+            <p class="text-lg text-gray-700 mb-8 max-w-4xl">Haga clic en cada paso del siguiente diagrama para explorar visualmente el flujo de información y colaboración entre los agentes durante el proceso de estimación.</p>
+            <div class="overflow-x-auto p-4">
+                <div class="flex flex-col md:flex-row items-center justify-center space-y-8 md:space-y-0 md:space-x-16">
+                    <!-- Pasos del Flujo -->
+                    <div id="flow-step-1" class="flow-step text-center relative cursor-pointer" data-title="1. Entrada y Delegación" data-content="El Agente Planificador recibe un lote de historias de usuario y las envía secuencialmente al Agente Razonador para iniciar el proceso de estimación individual.">
+                        <div class="bg-white p-6 rounded-lg shadow-lg w-48 h-32 flex items-center justify-center border-2 border-transparent hover:border-amber-500 transition">
+                            <p class="font-semibold">Entrada y Delegación</p>
+                        </div>
+                        <div class="step-connector hidden md:block"></div><div class="step-connector-arrow hidden md:block"></div>
+                    </div>
+                    <div id="flow-step-2" class="flow-step text-center relative cursor-pointer" data-title="2. Estimación Inicial (ML)" data-content="El Agente Razonador solicita una estimación cuantitativa al Agente Estimador. Este utiliza un modelo de Machine Learning entrenado con datos históricos para generar una predicción base de esfuerzo y tiempo.">
+                        <div class="bg-white p-6 rounded-lg shadow-lg w-48 h-32 flex items-center justify-center border-2 border-transparent hover:border-amber-500 transition">
+                             <p class="font-semibold">Estimación Inicial (ML)</p>
+                        </div>
+                         <div class="step-connector hidden md:block"></div><div class="step-connector-arrow hidden md:block"></div>
+                    </div>
+                    <div id="flow-step-3" class="flow-step text-center relative cursor-pointer" data-title="3. Investigación Externa" data-content="Paralelamente, el Agente Razonador pide al Agente Investigador que busque en la web información técnica relevante, utilizando el título de la historia y el stack tecnológico del proyecto para contextualizar la búsqueda.">
+                         <div class="bg-white p-6 rounded-lg shadow-lg w-48 h-32 flex items-center justify-center border-2 border-transparent hover:border-amber-500 transition">
+                            <p class="font-semibold">Investigación Externa</p>
+                        </div>
+                         <div class="step-connector hidden md:block"></div><div class="step-connector-arrow hidden md:block"></div>
+                    </div>
+                     <div id="flow-step-4" class="flow-step text-center relative cursor-pointer" data-title="4. Razonamiento y Síntesis (LLM)" data-content="El Agente Razonador consolida toda la información: la historia de usuario, la estimación del ML y los hallazgos de la web. Construye un prompt detallado y lo envía a la API de Google Gemini para un análisis profundo.">
+                        <div class="bg-white p-6 rounded-lg shadow-lg w-48 h-32 flex items-center justify-center border-2 border-transparent hover:border-amber-500 transition">
+                             <p class="font-semibold">Razonamiento (LLM)</p>
+                        </div>
+                        <div class="step-connector hidden md:block"></div><div class="step-connector-arrow hidden md:block"></div>
+                    </div>
+                     <div id="flow-step-5" class="flow-step text-center relative cursor-pointer" data-title="5. Agregación y Reporte" data-content="Gemini analiza los datos, identifica riesgos y devuelve una estimación final justificada. El Agente Razonador la envía al Planificador, que la agrega al informe final del lote y lo presenta al usuario.">
+                        <div class="bg-white p-6 rounded-lg shadow-lg w-48 h-32 flex items-center justify-center border-2 border-transparent hover:border-amber-500 transition">
+                             <p class="font-semibold">Agregación y Reporte</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Sección 3: Los Agentes -->
+        <section id="agents" class="mb-20 scroll-mt-24">
+             <h2 class="section-title text-3xl font-bold mb-8">Los Agentes Especialistas</h2>
+             <div class="flex flex-col md:flex-row gap-8">
+                <div class="w-full md:w-1/3">
+                    <div id="agent-tabs" class="flex flex-col space-y-2">
+                        <button class="agent-tab text-left p-4 rounded-lg font-semibold bg-amber-500 text-white" data-agent="planner">📋 Agente Planificador</button>
+                        <button class="agent-tab text-left p-4 rounded-lg font-semibold bg-white" data-agent="estimator">📈 Agente Estimador (ML)</button>
+                        <button class="agent-tab text-left p-4 rounded-lg font-semibold bg-white" data-agent="researcher">🌐 Agente Investigador</button>
+                        <button class="agent-tab text-left p-4 rounded-lg font-semibold bg-white" data-agent="reasoner">🧠 Agente Razonador (LLM)</button>
+                    </div>
+                </div>
+                <div class="w-full md:w-2/3">
+                    <div id="agent-content" class="bg-white p-8 rounded-lg shadow-lg min-h-[250px] fade-in">
+                        <!-- Contenido dinámico de los agentes -->
+                    </div>
+                </div>
+             </div>
+        </section>
+
+        <!-- Sección 4: Modelo IA -->
+        <section id="model" class="mb-20 scroll-mt-24">
+            <h2 class="section-title text-3xl font-bold mb-8">El Corazón del Sistema: Modelo de IA</h2>
+            <p class="text-lg text-gray-700 mb-8 max-w-4xl">El núcleo predictivo del sistema es un modelo de `GradientBoostingRegressor` que proporciona la estimación inicial. Este modelo se entrena siguiendo un pipeline robusto para asegurar su precisión. Todos los archivos y scripts relacionados con el modelo se encuentran en la carpeta `proyect/model/`.</p>
+             <div class="overflow-x-auto p-4 bg-white rounded-lg shadow-lg">
+                 <div class="flex flex-col md:flex-row items-center justify-center space-y-8 md:space-y-0 md:space-x-16">
+                    <div class="text-center">
+                        <div class="bg-gray-100 p-4 rounded-lg shadow-inner w-40 flex items-center justify-center">📄<p class="font-semibold ml-2">Fuente de Datos</p></div>
+                        <p class="text-xs mt-2 text-gray-600 max-w-xs">`stories_dataset.csv` con datos históricos.</p>
+                    </div>
+                    <div class="text-2xl text-gray-400 hidden md:block">→</div>
+                    <div class="text-center">
+                         <div class="bg-gray-100 p-4 rounded-lg shadow-inner w-40 flex items-center justify-center">🛠️<p class="font-semibold ml-2">Ingeniería de Features</p></div>
+                         <p class="text-xs mt-2 text-gray-600 max-w-xs">Extracción de características con `train_model.py`.</p>
+                    </div>
+                    <div class="text-2xl text-gray-400 hidden md:block">→</div>
+                    <div class="text-center">
+                         <div class="bg-gray-100 p-4 rounded-lg shadow-inner w-40 flex items-center justify-center">🔢<p class="font-semibold ml-2">Vectorización</p></div>
+                         <p class="text-xs mt-2 text-gray-600 max-w-xs">Conversión del texto a vectores numéricos con TF-IDF.</p>
+                    </div>
+                     <div class="text-2xl text-gray-400 hidden md:block">→</div>
+                    <div class="text-center">
+                         <div class="bg-gray-100 p-4 rounded-lg shadow-inner w-40 flex items-center justify-center">💪<p class="font-semibold ml-2">Entrenamiento</p></div>
+                         <p class="text-xs mt-2 text-gray-600 max-w-xs">Entrenamiento del modelo `GradientBoosting` optimizado.</p>
+                    </div>
+                     <div class="text-2xl text-gray-400 hidden md:block">→</div>
+                     <div class="text-center">
+                         <div class="bg-amber-500 text-white p-4 rounded-lg shadow-inner w-40 flex items-center justify-center">📦<p class="font-semibold ml-2">Serialización</p></div>
+                         <p class="text-xs mt-2 text-gray-600 max-w-xs">Guardado del modelo en `effort_model.pkl` y `text_vectorizer.pkl`.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Sección 5: Puesta en Marcha -->
+        <section id="setup" class="scroll-mt-24">
+             <h2 class="section-title text-3xl font-bold mb-8">Puesta en Marcha</h2>
+             <div class="space-y-6">
+
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="font-bold text-xl mb-4">Estructura del Proyecto</h3>
+                    <p class="text-gray-700 mb-4">Para que el sistema funcione correctamente, los archivos y carpetas deben estar organizados de la siguiente manera:</p>
+                    <div class="tree-container bg-gray-100 p-4 rounded-lg text-sm font-mono">
+                        <ul>
+                            <li><span class="folder">📁 .</span>
+                                <ul>
+                                    <li><span class="folder">📁 prosody-config/</span>
+                                        <ul>
+                                            <li><span class="file">📄 prosody.cfg.lua</span></li>
+                                        </ul>
+                                    </li>
+                                    <li><span class="folder">📁 proyect/</span>
+                                        <ul>
+                                            <li><span class="folder">📁 input/</span>
+                                                <ul>
+                                                     <li><span class="file">📄 stories_batch.json</span></li>
+                                                    <li><span class="file">📄 tech_stack.json</span></li>
+                                                </ul>
+                                            </li>
+                                             <li><span class="folder">📁 model/</span>
+                                                <ul>
+                                                    <li><span class="file">📄 stories_dataset.csv</span></li>
+                                                    <li><span class="file">📄 setup_models.py</span></li>
+                                                    <li><span class="file">📄 ...</span></li>
+                                                </ul>
+                                            </li>
+                                            <li><span class="file">📄 estimator_agent.py</span></li>
+                                            <li><span class="file">📄 planner_agent.py</span></li>
+                                            <li><span class="file">📄 reasoner_agent.py</span></li>
+                                            <li><span class="file">📄 researcher_agent.py</span></li>
+                                            <li><span class="file">📄 main.py</span></li>
+                                            <li><span class="file">📄 .env</span></li>
+
+                                        </ul>
+                                    </li>
+                                    <li><span class="file">📄 register_agents.sh</span></li>
+                                    <li><span class="file">📄 run_docker.sh</span></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="font-bold text-xl mb-2">Paso 1: Configuración del Entorno</h3>
+                    <p class="text-gray-700 mb-4">Desde la carpeta raíz del proyecto, crea un entorno virtual e instala las dependencias.</p>
+                    <code class="block bg-gray-900 text-white p-4 rounded-md text-sm">
+                        # Crear y activar entorno virtual (ejemplo)<br />
+                        python3 -m venv spade_env\nsource spade_env/bin/activate<br />
+                        
+                        # Instalar dependencias <br />
+                        pip install -r digital-twin/requirements.txt</code>
+                </div>
+                 <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="font-bold text-xl mb-2">Paso 2: Servidor XMPP y Registro de Agentes</h3>
+                    <p class="text-gray-700 mb-4">Inicia el servidor Prosody usando Docker y ejecuta el script para registrar los agentes. Asegúrate de que `prosody-config/prosody.cfg.lua` exista.</p>
+                    <code class="block bg-gray-900 text-white p-4 rounded-md text-sm mb-4"># Comando para iniciar el contenedor (desde la raíz del proyecto)<br/>./run_podman.sh<br/># Comando para registrar los agentes<br/>./register_agents.sh</code>
+                    <h4 class="font-semibold text-lg mb-3">Explicación de la Configuración de Prosody</h4>
+                    <p class="text-gray-700 mb-4">El archivo `prosody.cfg.lua` define cómo funciona nuestro servidor de mensajería. Estos son los parámetros clave para nuestro entorno de desarrollo:</p>
+                    <pre class="bg-gray-900 text-white p-4 rounded-md text-sm overflow-x-auto"><code>admins = { "admin@localhost" }
+modules_enabled = {
+    "roster"; "saslauth"; "disco"; "private"; "vcard";
+}
+allow_registration = true
+c2s_require_encryption = false
+authentication = "internal_plain"
+VirtualHost "localhost"</code></pre>
+                    <ul class="list-disc list-inside mt-4 space-y-2 text-gray-700">
+                        <li><span class="font-semibold">admins:</span> Define qué usuario tiene permisos de administrador en el servidor.</li>
+                        <li><span class="font-semibold">modules_enabled:</span> Activa las funcionalidades básicas que SPADE necesita, como la lista de contactos (roster) y la autenticación (saslauth).</li>
+                        <li><span class="font-semibold">allow_registration = true:</span> Permite que nuestro script `register_agents.sh` pueda crear las cuentas de los agentes automáticamente.</li>
+                        <li><span class="font-semibold">c2s_require_encryption = false:</span> Desactiva la encriptación obligatoria para simplificar la configuración en un entorno de desarrollo local. No usar en producción.</li>
+                        <li><span class="font-semibold">authentication = "internal_plain":</span> Indica que Prosody usará su propia base de datos interna para validar usuarios con usuario y contraseña en texto plano.</li>
+                        <li><span class="font-semibold">VirtualHost "localhost":</span> Define el "dominio" de nuestro servidor. Por eso, las direcciones de nuestros agentes son `planner@localhost`, `estimator@localhost`, etc.</li>
+                    </ul>
+                </div>
+                 <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="font-bold text-xl mb-2">Paso 3: API Key y Entrenamiento del Modelo</h3>
+                    <p class="text-gray-700 mb-4">Configura tu clave de API de Google Gemini en el archivo `.env`. Luego, ejecuta el script de entrenamiento desde la carpeta `digital-twin`.</p>
+                    <code class="block bg-gray-900 text-white p-4 rounded-md text-sm"># Navegar a la carpeta del digital-twin<br>cd digital-twin<br># Ejecutar entrenamiento<br>python model/setup_models.py</code>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md bg-amber-50 border-l-4 border-amber-500">
+                    <h3 class="font-bold text-xl mb-2">Paso 4: Ejecutar el Sistema</h3>
+                    <p class="text-gray-700 mb-4">Finalmente, lanza el sistema principal desde la carpeta `digital-twin`.</p>
+                    <code class="block bg-gray-900 text-white p-4 rounded-md text-sm"># Estando en la carpeta 'digital-twin'<br>python main.py</code>
+                </div>
+             </div>
+        </section>
+    </main>
+
+    <!-- Modal para el Flujo -->
+    <div id="flow-modal" class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center p-4 z-50 fade-in">
+        <div class="bg-white rounded-lg shadow-2xl max-w-2xl w-full p-8 relative">
+            <button id="close-modal-btn" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
+            <h3 id="modal-title" class="text-2xl font-bold mb-4"></h3>
+            <p id="modal-content" class="text-gray-700"></p>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Lógica del Modal del Flujo de Arquitectura ---
+            const flowSteps = document.querySelectorAll('.flow-step');
+            const modal = document.getElementById('flow-modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalContent = document.getElementById('modal-content');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+
+            flowSteps.forEach(step => {
+                step.addEventListener('click', () => {
+                    modalTitle.textContent = step.dataset.title;
+                    modalContent.textContent = step.dataset.content;
+                    modal.classList.remove('hidden');
+                    modal.classList.add('flex');
+                });
+            });
+
+            const closeModal = () => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            };
+
+            closeModalBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+
+            // --- Lógica de las Pestañas de Agentes ---
+            const agentTabs = document.querySelectorAll('.agent-tab');
+            const agentContentContainer = document.getElementById('agent-content');
+            const agentData = {
+                planner: {
+                    title: '📋 Agente Planificador',
+                    role: 'Project Manager Digital.',
+                    logic: 'Orquesta el proceso de estimación para un lote de historias. Gestiona el flujo de manera secuencial, enviando una historia y esperando su resultado final antes de proceder con la siguiente. Es el punto de entrada y salida del sistema.'
+                },
+                estimator: {
+                    title: '📈 Agente Estimador (ML)',
+                    role: 'Desarrollador Senior con Experiencia.',
+                    logic: 'Carga un modelo de `GradientBoostingRegressor` pre-entrenado. Al recibir una historia de usuario, aplica el mismo pipeline de ingeniería de características que en el entrenamiento (vectorización de texto + características extraídas) para predecir un esfuerzo y tiempo base.'
+                },
+                researcher: {
+                    title: '🌐 Agente Investigador',
+                    role: 'Investigador Técnico.',
+                    logic: 'Recibe el título y palabras clave de una historia. Carga el `tech_stack.json` del proyecto para contextualizar sus búsquedas. Genera consultas técnicas avanzadas en inglés, busca en Google, extrae el contenido de los resultados más relevantes y lo resume para proporcionar un contexto útil.'
+                },
+                reasoner: {
+                    title: '🧠 Agente Razonador (LLM)',
+                    role: 'Líder Técnico / Arquitecto de Software.',
+                    logic: 'Es el cerebro del sistema. Utiliza una Máquina de Estados Finitos (FSM) para gestionar el ciclo de vida de la estimación de una historia. Coordina las solicitudes al Estimador y al Investigador, y finalmente, integra toda la información para consultar a la API de Gemini y obtener la estimación refinada.'
+                }
+            };
+            
+            function updateAgentContent(agentKey) {
+                const data = agentData[agentKey];
+                agentContentContainer.innerHTML = `
+                    <h3 class="text-2xl font-bold mb-4">${data.title}</h3>
+                    <h4 class="font-semibold text-lg mb-2">Rol:</h4>
+                    <p class="text-gray-700 mb-4">${data.role}</p>
+                    <h4 class="font-semibold text-lg mb-2">Lógica:</h4>
+                    <p class="text-gray-700">${data.logic}</p>
+                `;
+                agentContentContainer.classList.remove('fade-in');
+                void agentContentContainer.offsetWidth; // Trigger reflow
+                agentContentContainer.classList.add('fade-in');
+            }
+            
+            agentTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    agentTabs.forEach(t => {
+                        t.classList.remove('bg-amber-500', 'text-white');
+                        t.classList.add('bg-white');
+                    });
+                    tab.classList.add('bg-amber-500', 'text-white');
+                    tab.classList.remove('bg-white');
+                    updateAgentContent(tab.dataset.agent);
+                });
+            });
+
+            // Cargar contenido del primer agente por defecto
+            updateAgentContent('planner');
+
+            // --- Lógica de Navegación Activa con Scroll ---
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href').substring(1) === entry.target.id) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, { rootMargin: '-30% 0px -70% 0px' });
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+            
+             // Smooth scroll for nav links
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
+
