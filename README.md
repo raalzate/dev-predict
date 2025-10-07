@@ -62,7 +62,7 @@ Sigue estos pasos para configurar y ejecutar el proyecto en tu entorno local.
     ```bash
     python -m venv spade_env
     source spade_env/bin/activate
-    pip install -r proyect/requirements.txt
+    pip install -r digital-twin/requirements.txt
     ```
 
 3.  **Iniciar el Servidor XMPP (Prosody)**
@@ -89,7 +89,7 @@ Sigue estos pasos para configurar y ejecutar el proyecto en tu entorno local.
     Este paso lee el `stories_dataset.csv`, entrena el modelo y crea los archivos `effort_model.pkl` y `text_vectorizer.pkl`.
     ```bash
     # Desde la carpeta raíz del proyecto
-    python proyect/train_model.py 
+    python digital-twin/setap_model.py 
     ```
     
 ### 3. Ejecución del Sistema
