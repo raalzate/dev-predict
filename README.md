@@ -10,25 +10,22 @@ El sistema se basa en una arquitectura de **microservicios cognitivos** utilizan
 
 **Flujo de Estimación:**
 ```
-
-Entrada (Historias de Usuario)
-↓
+        Entrada (Historias de Usuario)
+                    ↓
 
 1.  📋 Agente Planificador (Orquesta el lote)
-    ↓
+                    ↓  
 2.  🧠 Agente Razonador (Inicia el proceso para una historia)
-    ↓         ↘
-    ↓           ↘
-3.  📈 Agente Estimador (Da una estimación base con ML)      4. 🌐 Agente Investigador (Busca contexto en la web)
-    ↓           ↙
-    ↓         ↙
+                    ↓                 
+3.  📈 Agente Estimador (Da una estimación base con ML)
+                    ↓        
+4.  🌐 Agente Investigador (Busca contexto en la web)         
+                    ↓         
 4.  🧠 Agente Razonador (Sintetiza la información)
-    ↓
-5.  💡 Google Gemini (Refina la estimación y justifica)
-    ↓
+                    ↓
 6.  📋 Agente Planificador (Recopila el resultado)
-    ↓
-    Salida (Informe Final)
+                    ↓
+            Salida (Informe Final)
 
 ````
 
