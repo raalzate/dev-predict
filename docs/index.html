@@ -73,7 +73,7 @@
             <p class="text-lg text-gray-700 mb-8 max-w-4xl">
                 Este proyecto simula y automatiza el proceso cognitivo de un equipo de desarrollo al estimar la complejidad y el esfuerzo de las historias de usuario. Utiliza un sistema multiagente donde especialistas autónomos de IA colaboran para producir una estimación refinada, combinando datos históricos, investigación en tiempo real y razonamiento avanzado.
             </p>
-            <h3 class="text-2xl font-semibold mb-6">Stack Tecnológico Principal</h3>
+            <h3 class="text-2xl font-semibold mb-6">Stack Tecnológico y Recursos</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
                     <div class="text-2xl mb-2">🤖</div><h4 class="font-bold text-lg">SPADE (Python)</h4><p class="text-gray-600">Orquestación de la comunicación asíncrona entre agentes.</p>
@@ -90,6 +90,9 @@
                 <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
                      <div class="text-2xl mb-2">💬</div><h4 class="font-bold text-lg">Prosody & Docker</h4><p class="text-gray-600">Servidor XMPP para la comunicación de los agentes.</p>
                 </div>
+                <a href="https://github.com/raalzate/dev-predict" target="_blank" rel="noopener noreferrer" class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow block">
+                    <div class="text-2xl mb-2">👨‍💻</div><h4 class="font-bold text-lg">Código Fuente</h4><p class="text-gray-600">Explora el código completo del proyecto en GitHub.</p>
+                </a>
             </div>
         </section>
 
@@ -157,7 +160,7 @@
         <!-- Sección 4: Modelo IA -->
         <section id="model" class="mb-20 scroll-mt-24">
             <h2 class="section-title text-3xl font-bold mb-8">El Corazón del Sistema: Modelo de IA</h2>
-            <p class="text-lg text-gray-700 mb-8 max-w-4xl">El núcleo predictivo del sistema es un modelo de `GradientBoostingRegressor` que proporciona la estimación inicial. Este modelo se entrena siguiendo un pipeline robusto para asegurar su precisión. Todos los archivos y scripts relacionados con el modelo se encuentran en la carpeta `proyect/model/`.</p>
+            <p class="text-lg text-gray-700 mb-8 max-w-4xl">El núcleo predictivo del sistema es un modelo de `GradientBoostingRegressor` que proporciona la estimación inicial. Este modelo se entrena siguiendo un pipeline robusto para asegurar su precisión. Todos los archivos y scripts relacionados con el modelo se encuentran en la carpeta `digital-twin/model/`.</p>
              <div class="overflow-x-auto p-4 bg-white rounded-lg shadow-lg">
                  <div class="flex flex-col md:flex-row items-center justify-center space-y-8 md:space-y-0 md:space-x-16">
                     <div class="text-center">
@@ -205,52 +208,58 @@
                                             <li><span class="file">📄 prosody.cfg.lua</span></li>
                                         </ul>
                                     </li>
-                                    <li><span class="folder">📁 proyect/</span>
+                                    <li><span class="folder">📁 digital-twin/</span>
                                         <ul>
-                                            <li><span class="folder">📁 input/</span>
-                                                <ul>
-                                                     <li><span class="file">📄 stories_batch.json</span></li>
-                                                    <li><span class="file">📄 tech_stack.json</span></li>
-                                                </ul>
-                                            </li>
                                              <li><span class="folder">📁 model/</span>
                                                 <ul>
                                                     <li><span class="file">📄 stories_dataset.csv</span></li>
-                                                    <li><span class="file">📄 setup_models.py</span></li>
-                                                    <li><span class="file">📄 ...</span></li>
+                                                    <li><span class="file">📄 setup_model.py</span></li>
+                                                </ul>
+                                            </li>
+                                             <li><span class="folder">📁 input/</span>
+                                                <ul>
+                                                    <li><span class="file">📄 stories_batch.json</span></li>
+                                                    <li><span class="file">📄 tech_stack.json</span></li>
                                                 </ul>
                                             </li>
                                             <li><span class="file">📄 estimator_agent.py</span></li>
                                             <li><span class="file">📄 planner_agent.py</span></li>
-                                            <li><span class="file">📄 reasoner_agent.py</span></li>
+                                            <li><span class="file">📄 reasoner_agent_gemini.py</span></li>
                                             <li><span class="file">📄 researcher_agent.py</span></li>
                                             <li><span class="file">📄 main.py</span></li>
+                                            <li><span class="file">📄 requirements.txt</span></li>
                                             <li><span class="file">📄 .env</span></li>
 
                                         </ul>
                                     </li>
                                     <li><span class="file">📄 register_agents.sh</span></li>
-                                    <li><span class="file">📄 run_docker.sh</span></li>
+                                    <li><span class="file">📄 podman_run.sh</span></li>
                                 </ul>
                             </li>
                         </ul>
                     </div>
                 </div>
+                 
+                 <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="font-bold text-xl mb-2">Paso 1: Clonar el Repositorio</h3>
+                    <p class="text-gray-700 mb-4">Descarga el código fuente del proyecto directamente desde GitHub.</p>
+                    <code class="block bg-gray-900 text-white p-4 rounded-md text-sm">git clone https://github.com/raalzate/dev-predict.git<br>cd dev-predict</code>
+                </div>
 
                 <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="font-bold text-xl mb-2">Paso 1: Configuración del Entorno</h3>
+                    <h3 class="font-bold text-xl mb-2">Paso 2: Configuración del Entorno</h3>
                     <p class="text-gray-700 mb-4">Desde la carpeta raíz del proyecto, crea un entorno virtual e instala las dependencias.</p>
                     <code class="block bg-gray-900 text-white p-4 rounded-md text-sm">
                         # Crear y activar entorno virtual (ejemplo)<br />
-                        python3 -m venv spade_env\nsource spade_env/bin/activate<br />
-                        
+                        python3 -m venv spade_env<br />source spade_env/bin/activate<br />
+                        <br />
                         # Instalar dependencias <br />
                         pip install -r digital-twin/requirements.txt</code>
                 </div>
                  <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="font-bold text-xl mb-2">Paso 2: Servidor XMPP y Registro de Agentes</h3>
+                    <h3 class="font-bold text-xl mb-2">Paso 3: Servidor XMPP y Registro de Agentes</h3>
                     <p class="text-gray-700 mb-4">Inicia el servidor Prosody usando Docker y ejecuta el script para registrar los agentes. Asegúrate de que `prosody-config/prosody.cfg.lua` exista.</p>
-                    <code class="block bg-gray-900 text-white p-4 rounded-md text-sm mb-4"># Comando para iniciar el contenedor (desde la raíz del proyecto)<br/>./run_podman.sh<br/># Comando para registrar los agentes<br/>./register_agents.sh</code>
+                    <code class="block bg-gray-900 text-white p-4 rounded-md text-sm mb-4"># Comando para iniciar el contenedor (desde la raíz del proyecto)<br/>docker run -d --name prosody -p 5222:5222 -v $(pwd)/prosody-config:/etc/prosody prosody/prosody<br/><br/># Comando para registrar los agentes<br/>./register_agents.sh</code>
                     <h4 class="font-semibold text-lg mb-3">Explicación de la Configuración de Prosody</h4>
                     <p class="text-gray-700 mb-4">El archivo `prosody.cfg.lua` define cómo funciona nuestro servidor de mensajería. Estos son los parámetros clave para nuestro entorno de desarrollo:</p>
                     <pre class="bg-gray-900 text-white p-4 rounded-md text-sm overflow-x-auto"><code>admins = { "admin@localhost" }
@@ -271,14 +280,14 @@ VirtualHost "localhost"</code></pre>
                     </ul>
                 </div>
                  <div class="bg-white p-6 rounded-lg shadow-md">
-                    <h3 class="font-bold text-xl mb-2">Paso 3: API Key y Entrenamiento del Modelo</h3>
-                    <p class="text-gray-700 mb-4">Configura tu clave de API de Google Gemini en el archivo `.env`. Luego, ejecuta el script de entrenamiento desde la carpeta `digital-twin`.</p>
-                    <code class="block bg-gray-900 text-white p-4 rounded-md text-sm"># Navegar a la carpeta del digital-twin<br>cd digital-twin<br># Ejecutar entrenamiento<br>python model/setup_models.py</code>
+                    <h3 class="font-bold text-xl mb-2">Paso 4: API Key y Entrenamiento del Modelo</h3>
+                    <p class="text-gray-700 mb-4">Configura tu clave de API de Google Gemini en el archivo `.env`. Luego, ejecuta el script de entrenamiento desde la carpeta `proyect`.</p>
+                    <code class="block bg-gray-900 text-white p-4 rounded-md text-sm"># Estando en la carpeta 'digital-twin'<br/>python setup_model.py</code>
                 </div>
                 <div class="bg-white p-6 rounded-lg shadow-md bg-amber-50 border-l-4 border-amber-500">
-                    <h3 class="font-bold text-xl mb-2">Paso 4: Ejecutar el Sistema</h3>
+                    <h3 class="font-bold text-xl mb-2">Paso 5: Ejecutar el Sistema</h3>
                     <p class="text-gray-700 mb-4">Finalmente, lanza el sistema principal desde la carpeta `digital-twin`.</p>
-                    <code class="block bg-gray-900 text-white p-4 rounded-md text-sm"># Estando en la carpeta 'digital-twin'<br>python main.py</code>
+                    <code class="block bg-gray-900 text-white p-4 rounded-md text-sm"># Estando en la carpeta 'digital-twin'<br/>python main.py</code>
                 </div>
              </div>
         </section>
