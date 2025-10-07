@@ -146,7 +146,7 @@ class ResearcherAgent(spade.agent.Agent):
     async def setup(self):
         print("[Researcher] Agente de investigación iniciado.")
         try:
-            with open(self.agent.stack_file, 'r') as f:
+            with open(self.stack_file, 'r') as f:
                 self.tech_stack = json.load(f).get('technologies', [])
             if self.tech_stack:
                 print(f"[Researcher] Stack tecnológico cargado: {self.tech_stack}")
