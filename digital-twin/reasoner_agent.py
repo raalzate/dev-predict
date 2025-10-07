@@ -65,8 +65,6 @@ class ReasonerAgent(spade.agent.Agent):
 
         self.add_behaviour(fsm)
 
-# --- Implementación de cada Estado ---
-
 class ReceiveStoryState(State):
     async def run(self):
         # Este estado ahora simplemente espera cualquier mensaje de solicitud
@@ -190,7 +188,6 @@ class ReasonWithGeminiState(State):
             model = genai.GenerativeModel('gemini-2.5-flash')
             response = model.generate_content(prompt)
             
-            # **CORRECCIÓN:** Lógica mejorada para extraer el JSON de forma segura
             text_response = response.text
             json_match = re.search(r'\{.*\}', text_response, re.DOTALL)
             

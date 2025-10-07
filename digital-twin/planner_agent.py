@@ -33,7 +33,6 @@ class PlannerAgent(spade.agent.Agent):
                 await self.agent.stop()
                 return
 
-            # **CORRECCIÓN CLAVE:** Procesar una historia a la vez, esperando la respuesta.
             for story in self.agent.stories:
                 thread_id = str(uuid.uuid4())
                 title = story.get('title', 'N/A')
@@ -49,7 +48,6 @@ class PlannerAgent(spade.agent.Agent):
                 await self.send(msg)
 
                 # Esperar la respuesta específica para este hilo de conversación
-                template = Template(thread=thread_id)
                 response = await self.receive(timeout=60) # Aumentado el timeout para Gemini
 
                 if response:
