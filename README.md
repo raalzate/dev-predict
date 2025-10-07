@@ -1,6 +1,3 @@
-Claro, aquí tienes un archivo `README.md` completo y profesional para tu proyecto, listo para ser incluido en tu repositorio de código.
-
-```markdown:readme.md del Proyecto:README.md
 # Gemelo Digital de Estimación de Proyectos de Software
 
 Este proyecto implementa un sistema multiagente inteligente para automatizar la estimación de tareas de desarrollo de software. Utiliza una combinación de Machine Learning, un Agente Investigador web y un Modelo de Lenguaje Grande (LLM) para analizar historias de usuario y producir estimaciones refinadas de esfuerzo, tiempo y complejidad.
@@ -32,8 +29,6 @@ Entrada (Historias de Usuario)
 6.  📋 Agente Planificador (Recopila el resultado)
     ↓
     Salida (Informe Final)
-
-<!-- end list -->
 
 ````
 
@@ -102,13 +97,13 @@ Sigue estos pasos para configurar y ejecutar el proyecto en tu entorno local.
     
 ### 3. Ejecución del Sistema
 
-Una vez completada la configuración, lanza el sistema multiagente desde la carpeta `proyect`.
+Una vez completada la configuración, lanza el sistema multiagente desde la carpeta `digital-twin`.
+
+
 ```bash
-cd proyect
-python main_gemini.py
+cd digital-twin
+python main.py
 ````
 
 El sistema comenzará a procesar el lote de historias definido en `stories_batch.json` y mostrará el informe final en la consola.
 
-```
-```
