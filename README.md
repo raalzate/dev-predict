@@ -89,7 +89,7 @@ Sigue estos pasos para configurar y ejecutar el proyecto en tu entorno local.
     Este paso lee el `stories_dataset.csv`, entrena el modelo y crea los archivos `effort_model.pkl` y `text_vectorizer.pkl`.
     ```bash
     # Desde la carpeta raíz del proyecto
-    python digital-twin/setap_model.py 
+    python digital-twin/setup_models.py 
     ```
     
 ### 3. Ejecución del Sistema
