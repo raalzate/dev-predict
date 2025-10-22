@@ -6,7 +6,7 @@ DOMAIN="localhost"
 PASSWORD="pass"
 
 # Lista de nombres de usuario de los agentes (la parte antes del @).
-AGENTS=("planner" "reasoner" "estimator" "researcher")
+AGENTS=("planner" "reasoner" "estimator" "researcher", "webagent")
 
 
 # --- LÓGICA DEL SCRIPT ---
@@ -26,6 +26,7 @@ for agent_user in "${AGENTS[@]}"; do
     echo "-> Registrando agente: ${agent_user}@${DOMAIN}"
     
     # Comando para ejecutar 'prosodyctl' dentro del contenedor de Podman
+    #  podman exec prosody-local prosodyctl register "webagent" "localhost" "pass"
     podman exec "$CONTAINER_NAME" prosodyctl register "$agent_user" "$DOMAIN" "$PASSWORD"
     
     # Comprobar el código de salida del comando
