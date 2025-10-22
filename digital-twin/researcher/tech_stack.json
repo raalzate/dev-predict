@@ -1,0 +1,13 @@
+{
+  "projectName": "Modern E-Commerce Platform",
+  "technologies": [
+    "reactjs",
+    "react-native",
+    "nestjs",
+    "mongodb",
+    "rest",
+    "typescript",
+    "jest",
+    "aws"
+  ]
+}
