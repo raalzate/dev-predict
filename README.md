@@ -1,175 +1,87 @@
-# Gemelo Digital de Estimación de Proyectos de Software
+# Digital Twin - Generador de Planes Técnicos
 
-Este proyecto implementa un sistema multiagente inteligente para automatizar la estimación de tareas de desarrollo de software. Utiliza una combinación de Machine Learning, un Agente Investigador web y un Modelo de Lenguaje Grande (LLM) para analizar historias de usuario y producir estimaciones refinadas de esfuerzo, tiempo y complejidad.
+Este proyecto es una aplicación FastAPI que actúa como un "gemelo digital" de un equipo de ingeniería. Su función principal es recibir una historia de usuario en formato Gherkin y generar un plan técnico detallado para su implementación, utilizando una combinación de modelos de Machine Learning y un Modelo de Lenguaje Grande (LLM).
 
----
+## Arquitectura
 
-## 🏛️ Arquitectura
+El sistema está orquestado por **LangGraph**, que define un flujo de trabajo claro y explícito. Cuando se recibe una solicitud, el grafo ejecuta los siguientes pasos en secuencia:
 
-El sistema se basa en una arquitectura de **microservicios cognitivos** utilizando la plataforma de agentes **SPADE**. Cada agente es un especialista autónomo que colabora a través de un bus de mensajes asíncrono (XMPP).
+1.  **Investigación (ResearchService)**: Realiza una búsqueda web para recopilar contexto técnico relevante sobre las palabras clave y el título de la historia de usuario.
+2.  **Predicción (PredictionService)**: Utiliza un modelo de Machine Learning (un `HistGradientBoostingRegressor` entrenado) para estimar el esfuerzo y el tiempo requeridos para la tarea, basándose en la descripción de la historia.
+3.  **Planificación (LLMPlanGenerator)**: Alimenta al LLM (Gemini-Pro de Google) con la historia de usuario, la estimación del ML y los resultados de la investigación. El LLM, actuando como un Tech Lead, genera un plan de acción detallado, desglosado en tareas, y lo devuelve en un formato JSON estructurado gracias a `JsonOutputParser` de LangChain.
 
-**Flujo de Estimación:**
-```
-        Entrada (Historias de Usuario)
-                        ↓
+El uso de LangGraph permite una arquitectura modular y fácil de extender, donde cada paso es un nodo independiente en el grafo.
 
-1.  📋 Agente Planificador (Orquesta el lote)
-                        ↓  
-2.  🧠 Agente Razonador (Inicia el proceso para una historia)
-                        ↓                 
-3.  📈 Agente Estimador (Da una estimación base con ML)
-                        ↓        
-4.  🌐 Agente Investigador (Busca contexto en la web)         
-                        ↓         
-4.  🧠 Agente Razonador (Sintetiza la información)
-                        ↓
-6.  📋 Agente Planificador (Recopila el resultado)
-                        ↓
-            Salida (Informe Final)
+## Requisitos
 
-````
+- Python 3.8+
+- Una clave de API de Google para el modelo Gemini (ver configuración).
 
----
+## 1. Instalación
 
-## ✨ Características Principales
+Clona el repositorio y navega al directorio del proyecto. Se recomienda crear un entorno virtual.
 
-* **Sistema Multiagente Colaborativo:** Cuatro agentes especializados que trabajan juntos.
-* **Estimación Basada en Datos:** Utiliza un modelo de Machine Learning (`GradientBoostingRegressor`) entrenado con datos históricos.
-* **Contexto en Tiempo Real:** El `Agente Investigador` busca en la web para enriquecer las estimaciones con información técnica actualizada.
-* **Razonamiento Avanzado:** El `Agente Razonador` integra toda la información y utiliza la **API de Google Gemini** para un análisis y justificación de nivel experto.
-* **Configuración Flexible:** Permite definir el stack tecnológico del proyecto (`tech_stack.json`) para refinar las búsquedas.
-
----
-
-
-
-## 📄 Archivos de Configuración y Entrada
-
-Para que el sistema funcione, necesita dos archivos JSON principales que actúan como entrada de datos y configuración.
-
-### `stories_batch.json`
-
-Este archivo contiene el lote de historias de usuario que el **Agente Planificador** procesará. Es una lista de objetos, donde cada objeto representa una tarea a estimar.
-
-**Estructura:**
-* `id` (string): Identificador único de la historia (ej. "STORY-001").
-* `title` (string): Título descriptivo y conciso de la tarea.
-* `gherkin` (string): La descripción de la historia en formato Gherkin (`Given`/`When`/`Then`).
-* `unit_tests` (string): El código o la descripción de las pruebas unitarias asociadas. Proporciona un contexto técnico crucial sobre los criterios de aceptación.
-
-**Ejemplo:**
-```json
-[
-    {
-        "id": "STORY-001",
-        "title": "Exportar reporte de ventas a PDF",
-        "gherkin": "Feature: Exportar reporte de ventas...",
-        "unit_tests": "def test_pdf_generation():\\n  # Verifica que el archivo se crea..."
-    },
-    {
-        "id": "STORY-002",
-        "title": "Carga de avatar de perfil a S3",
-        "gherkin": "Feature: Carga de avatar de perfil...",
-        "unit_tests": "def test_upload_valid_image(client, mock_s3):\\n  # Simula subida exitosa..."
-    }
-]
-````
-
-### `tech_stack.json`
-
-Este archivo proporciona al **Agente Investigador** el contexto sobre el stack tecnológico del proyecto. Esto le permite generar consultas de búsqueda mucho más relevantes y específicas.
-
-**Estructura:**
-
-  * `projectName` (string): Nombre del proyecto (informativo).
-  * `technologies` (array of strings): Una lista de las tecnologías, frameworks y librerías principales del proyecto.
-
-**Ejemplo:**
-
-```json
-{
-  "projectName": "Modern E-Commerce Platform",
-  "technologies": [
-    "vue.js",
-    "nuxt.js",
-    "node.js",
-    "express",
-    "mongodb",
-    "graphql",
-    "typescript",
-    "jest",
-    "nginx",
-    "aws ec2"
-  ]
-}
+```bash
+python -m venv venv
+source venv/bin/activate  # En Windows: venv\Scripts\activate
 ```
 
+Instala las dependencias necesarias:
 
-## 🚀 Puesta en Marcha
+```bash
+pip install -r requirements.txt
+```
 
-Sigue estos pasos para configurar y ejecutar el proyecto en tu entorno local.
+## 2. Configuración
 
-### 1. Prerrequisitos
-* Python 3.9+
-* Docker (o Podman)
-* Una clave de API de Google Gemini
+La aplicación requiere una clave de API de Google para funcionar. Crea un archivo `.env` en el directorio raíz `digital-twin/` y añade tu clave:
 
-### 2. Guía de Instalación
+```
+# digital-twin/.env
+GOOGLE_API_KEY="tu_clave_de_api_aqui"
+```
 
-1.  **Clonar el Repositorio**
-    ```bash
-    git clone <url_del_repositorio>
-    cd <nombre_del_repositorio>
-    ```
+## 3. Ejecutar la Aplicación
 
-2.  **Configurar el Entorno Virtual e Instalar Dependencias**
-    ```bash
-    python -m venv spade_env
-    source spade_env/bin/activate
-    pip install -r digital-twin/requirements.txt
-    ```
-
-3.  **Iniciar el Servidor XMPP (Prosody)**
-    Ejecuta el siguiente comando para iniciar el servidor de mensajería en un contenedor Docker. Asegúrate de tener la carpeta `prosody-config` con el archivo `prosody.cfg.lua`.
-    ```bash
-    docker run -d --name prosody -p 5222:5222 -v $(pwd)/prosody-config:/etc/prosody prosody/prosody
-    ```
-
-4.  **Registrar los Agentes**
-    Ejecuta el script para crear las cuentas de los agentes en el servidor Prosody.
-    ```bash
-    chmod +x register_agents.sh
-    ./register_agents.sh
-    ```
-
-5.  **Configurar la API Key de Gemini**
-    -   Renombra el archivo `.env.example` a `.env`.
-    -   Abre el archivo `.env` y pega tu clave de API.
-    ```
-    GEMINI_API_KEY="TU_API_KEY_DE_GEMINI_AQUI"
-    ```
-
-6.  **Entrenar el Modelo de Machine Learning**
-    Este paso lee el `stories_dataset.csv`, entrena el modelo y crea los archivos `effort_model.pkl` y `text_vectorizer.pkl`.
-    ```bash
-    # Desde la carpeta raíz del proyecto
-    python digital-twin/setup_models.py 
-    ```
-
-### 3. Ingresa tus historias y el stack del proyecto
-
-Tus historias van en la carpeta `input`.
-
-
-### 4. Ejecución del Sistema
-
-Una vez completada la configuración, lanza el sistema multiagente desde la carpeta `digital-twin`.
-
+Una vez instaladas las dependencias y configurada la clave de API, puedes iniciar el servidor FastAPI con Uvicorn:
 
 ```bash
 cd digital-twin
-python main.py
-````
+uvicorn main:app --reload
+```
 
-El sistema comenzará a procesar el lote de historias definido en `stories_batch.json` y mostrará el informe final en la consola.
+El servidor estará disponible en `http://127.0.0.1:8000`.
 
+## 4. Uso del Endpoint
+
+Puedes enviar una historia de usuario al endpoint `/generate_plan/` a través de una solicitud POST. Aquí tienes un ejemplo usando `curl`:
+
+```bash
+curl -X POST "http://127.0.0.1:8000/generate_plan/" \
+-H "Content-Type: application/json" \
+-d '{
+  "story_data": {
+    "id": "STORY-006",
+    "title": "Notificación en tiempo real al recibir mensaje",
+    "gherkin": "Feature: Notificaciones en tiempo real\n  Scenario: El usuario recibe un nuevo mensaje directo\n    Given el usuario tiene sesión iniciada en la aplicación\n    And está en cualquier sección del sistema\n    When otro usuario le envía un mensaje\n    Then el sistema muestra una notificación en tiempo real con el remitente y el contenido del mensaje"
+  }
+}'
+```
+
+La API responderá con un plan técnico detallado en formato JSON, generado por el LLM.
+
+## 5. Ejecutar las Pruebas
+
+El proyecto incluye pruebas unitarias para verificar la correcta funcionalidad del endpoint y la integración de los componentes. Para ejecutarlas, primero instala las dependencias de desarrollo:
+
+```bash
+pip install pytest httpx
+```
+
+Luego, desde el directorio `digital-twin/`, ejecuta `pytest`:
+
+```bash
+pytest
+```
+
+Las pruebas utilizan mocks para simular las respuestas de los servicios externos (LLM, ML, Research), garantizando ejecuciones rápidas y predecibles sin coste de API.
