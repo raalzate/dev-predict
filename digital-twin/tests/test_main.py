@@ -1,8 +1,6 @@
 import pytest
 from httpx import AsyncClient
 from unittest.mock import patch, MagicMock, AsyncMock
-
-# Ajuste para que el test pueda encontrar el módulo 'app' y 'digital-twin'
 import sys
 import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -28,9 +26,9 @@ mock_llm_plan_generator.generate_plan.return_value = [
 # Aplicamos los mocks a nivel de módulo para que se usen en lugar de los reales.
 # Esto se hace ANTES de importar 'app' para que la app se inicialice con los mocks.
 with patch.dict(sys.modules, {
-    'digital-twin.prediction': MagicMock(PredictionService=lambda **kwargs: mock_prediction_service),
-    'digital-twin.research': MagicMock(ResearchService=lambda **kwargs: mock_research_service),
-    'digital-twin.reasoner': MagicMock(LLMPlanGenerator=lambda **kwargs: mock_llm_plan_generator),
+    'prediction': MagicMock(PredictionService=lambda **kwargs: mock_prediction_service),
+    'research': MagicMock(ResearchService=lambda **kwargs: mock_research_service),
+    'reasoner': MagicMock(LLMPlanGenerator=lambda **kwargs: mock_llm_plan_generator),
 }):
     from main import app # La importación de la app se hace después de aplicar los mocks
 

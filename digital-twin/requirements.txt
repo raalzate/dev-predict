@@ -10,7 +10,9 @@ aiohttp
 jinja2
 langgraph
 langchain
-langchain-google-genai
+langchain_google_genai
 playwright
 playwright-stealth
 httpx
+pytest
+fastapi

@@ -3,8 +3,8 @@ import logging
 import joblib
 import pandas as pd
 import spacy
-from digital-twin.feature_extraction import extract_features
-from digital-twin.keyword_config import NUMERICAL_FEATURES
+from config import extract_features
+from config import NUMERICAL_FEATURES
 
 logger = logging.getLogger(__name__)
 

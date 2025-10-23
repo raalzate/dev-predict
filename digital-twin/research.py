@@ -8,10 +8,10 @@ import socket
 import certifi
 from typing import List, Set, Dict
 from bs4 import BeautifulSoup
-from playwright.async_api import async_playwright
-from playwright_stealth import stealth_async
+from playwright.sync_api import sync_playwright
+from playwright_stealth import Stealth
 
-from digital-twin.config import GOOGLE_API_KEY, GOOGLE_CX
+from config import GOOGLE_API_KEY, GOOGLE_CX
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -58,10 +58,9 @@ class ResearchService:
 
     async def _get_content_from_url(self, url: str) -> str | None:
         try:
-            async with async_playwright() as p:
+            with  Stealth().use_sync(sync_playwright()) as p:
                 browser = await p.chromium.launch(headless=True)
                 page = await browser.new_page()
-                await stealth_async(page)
 
                 await page.goto(url, wait_until="domcontentloaded")
                 await page.mouse.move(200, 300)

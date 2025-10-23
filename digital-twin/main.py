@@ -5,9 +5,9 @@ from typing import TypedDict, Dict, Any, List
 
 from langgraph.graph import StateGraph, END
 
-from digital-twin.prediction import PredictionService
-from digital-twin.reasoner import LLMPlanGenerator
-from digital-twin.research import ResearchService
+from prediction import PredictionService
+from reasoner import LLMPlanGenerator
+from research import ResearchService
 
 app = FastAPI()
 
@@ -17,7 +17,7 @@ class PlanRequest(BaseModel):
 
 # --- Inicialización de Servicios ---
 # Estos servicios encapsulan la lógica de cada paso del proceso.
-MODEL_PATH = 'model/effort_time_estimator.pkl'
+MODEL_PATH = 'model/effort_model.joblib'
 TECH_STACK_FILE = 'model/tech_stack.json'
 
 try:
